@@ -9,6 +9,7 @@
   "author": "idkfelix",
   "license": "ISC",
   "dependencies": {
+    "@idkfelix/compass.js": "^1.0.8",
     "@types/node": "^20.11.27",
     "obsidian": "^1.5.7-1"
   }
