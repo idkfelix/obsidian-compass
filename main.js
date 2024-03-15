@@ -1,4 +1,5 @@
 const {Plugin, ItemView, PluginSettingTab, Setting} = require('obsidian')
+const CompassClient = require('@idkfelix/compass.js')
 
 class SettingTab extends PluginSettingTab {
 	constructor(app, plugin) {
@@ -23,6 +24,7 @@ class SettingTab extends PluginSettingTab {
 }
 
 const CompassView = "CompassView"
+
 class compassView extends ItemView {
   constructor(leaf, sessionId) {
     super(leaf);
@@ -35,7 +37,7 @@ class compassView extends ItemView {
   async onOpen() {
     const container = this.containerEl.children[1];
     container.empty();
-    container.createEl("h4", { text: this.sessionId });
+    container.createEl("h4", { text: this.sessionId});
   }
 }
 
