@@ -26,8 +26,8 @@
 
 <div style="max-width: 300px;max-height:75px">
   <h2 class="HyperMD-header HyperMD-header-2 cm-line">{date}</h2>
-  <button on:click={()=>{incrementDate(-1)}}>Previous Day</button>
-  <button on:click={()=>{incrementDate(+1)}}>Next Day</button>
+  <button on:click={()=>{incrementDate(-1)}}>Previous</button>
+  <button on:click={()=>{incrementDate(+1)}}>Next</button>
   {#await res}
     <h3>Loading...</h3>
   {:then periods} 
