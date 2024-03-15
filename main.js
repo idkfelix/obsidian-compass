@@ -1,5 +1,5 @@
-const {Plugin, ItemView, PluginSettingTab, Setting} = require('obsidian')
-const CompassClient = require('@idkfelix/compass.js')
+const {Plugin, ItemView, PluginSettingTab, Setting, App} = require('obsidian')
+const CompassClient = require('@idkfelix/compass.js').default
 
 class SettingTab extends PluginSettingTab {
 	constructor(app, plugin) {
@@ -23,6 +23,13 @@ class SettingTab extends PluginSettingTab {
 	}
 }
 
+async function getCalendar(sessionId){
+  const client = await CompassClient('mullauna-vic.compass.education','ASP.NET_SessionId='+sessionId)
+  const date = new Date().toISOString().slice(0,10)
+  const res = await client.Calendar.getCalendarEventsByUser(client.userId,date,date)
+  return res
+}
+
 const CompassView = "CompassView"
 
 class compassView extends ItemView {
@@ -35,9 +42,10 @@ class compassView extends ItemView {
   getDisplayText() {return "Compass"}
 
   async onOpen() {
+    const res = await getCalendar(this.sessionId)
     const container = this.containerEl.children[1];
     container.empty();
-    container.createEl("h4", { text: this.sessionId});
+    container.createEl("h4", { text: JSON.stringify(res)});
   }
 }
 
