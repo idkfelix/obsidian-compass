@@ -1,16 +1,19 @@
 {
   "name": "compass",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "version": "4.2.0",
+  "description": "Compass Education intergration for Obsidian.md",
+  "main": "src/dist.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node esbuild.mjs"
   },
   "author": "idkfelix",
   "license": "ISC",
   "dependencies": {
-    "@idkfelix/compass.js": "^1.0.9",
+    "@idkfelix/compass.js": "^1.0.9"
+  },
+  "devDependencies": {
+    "obsidian": "^1.5.7-1",
     "@types/node": "^20.11.27",
-    "obsidian": "^1.5.7-1"
+    "esbuild": "^0.20.2"
   }
 }

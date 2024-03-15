@@ -1,4 +1,4 @@
-const {Plugin, ItemView, PluginSettingTab, Setting, App} = require('obsidian')
+const {Plugin, ItemView, PluginSettingTab, Setting} = require('obsidian')
 const CompassClient = require('@idkfelix/compass.js').default
 
 class SettingTab extends PluginSettingTab {
@@ -6,11 +6,9 @@ class SettingTab extends PluginSettingTab {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
-
 	display(){
 		const {containerEl} = this;
 		containerEl.empty();
-
 		new Setting(containerEl)
 			.setName('ASP.NET_SessionId=')
 			.addText(text => text
@@ -59,18 +57,16 @@ module.exports = class CompassPlugin extends Plugin {
   }
 
   async onload() {
-    // Load settings & Create the settings tab
     await this.loadSettings()
     this.addSettingTab(new SettingTab(this.app, this))
 
-    // Bind CompassView
     this.registerView(
       CompassView,
       (leaf) => new compassView(leaf,this.settings.sessionId)
     );
 
     this.addRibbonIcon("dice", "Compass", () => {
-      // Remove any existing leaf
+      // Remove existing leaf
       this.app.workspace.detachLeavesOfType(CompassView);
       // Create leaf on right
       this.app.workspace.getRightLeaf(false).setViewState({
@@ -85,7 +81,6 @@ module.exports = class CompassPlugin extends Plugin {
   }
 
   async onUnload() {
-    // remove leaf
     this.app.workspace.detachLeavesOfType(CompassView);
   }
 }
