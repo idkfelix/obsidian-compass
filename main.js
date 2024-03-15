@@ -7444,10 +7444,10 @@ function create_fragment(ctx) {
       );
       t1 = space();
       button0 = element("button");
-      button0.textContent = "Previous Day";
+      button0.textContent = "Previous";
       t3 = space();
       button1 = element("button");
-      button1.textContent = "Next Day";
+      button1.textContent = "Next";
       t5 = space();
       info.block.c();
       attr(h2, "class", "HyperMD-header HyperMD-header-2 cm-line");
