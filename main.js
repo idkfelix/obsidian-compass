@@ -5232,6 +5232,10 @@ function space() {
 function empty() {
   return text("");
 }
+function listen(node, event, handler, options) {
+  node.addEventListener(event, handler, options);
+  return () => node.removeEventListener(event, handler, options);
+}
 function attr(node, attribute, value) {
   if (value == null)
     node.removeAttribute(attribute);
@@ -5240,6 +5244,13 @@ function attr(node, attribute, value) {
 }
 function children(element2) {
   return Array.from(element2.childNodes);
+}
+function set_data(text2, data) {
+  data = "" + data;
+  if (text2.data === data)
+    return;
+  text2.data = /** @type {string} */
+  data;
 }
 function set_style(node, key, value, important) {
   if (value == null) {
@@ -7198,7 +7209,7 @@ var compass_default = CompassClient;
 // src/main.svelte
 function get_each_context(ctx, list, i2) {
   const child_ctx = ctx.slice();
-  child_ctx[5] = list[i2];
+  child_ctx[9] = list[i2];
   return child_ctx;
 }
 function create_catch_block(ctx) {
@@ -7223,7 +7234,7 @@ function create_then_block(ctx) {
   let each_1_anchor;
   let each_value = ensure_array_like(
     /*periods*/
-    ctx[4]
+    ctx[8]
   );
   let each_blocks = [];
   for (let i2 = 0; i2 < each_value.length; i2 += 1) {
@@ -7246,10 +7257,10 @@ function create_then_block(ctx) {
     },
     p(ctx2, dirty) {
       if (dirty & /*client, res*/
-      5) {
+      6) {
         each_value = ensure_array_like(
           /*periods*/
-          ctx2[4]
+          ctx2[8]
         );
         let i2;
         for (i2 = 0; i2 < each_value.length; i2 += 1) {
@@ -7276,39 +7287,99 @@ function create_then_block(ctx) {
     }
   };
 }
+function create_if_block(ctx) {
+  let h4;
+  let t0_value = (
+    /*period*/
+    ctx[9].period + ""
+  );
+  let t0;
+  let t1;
+  let t2_value = (
+    /*period*/
+    ctx[9].title + ""
+  );
+  let t2;
+  return {
+    c() {
+      h4 = element("h4");
+      t0 = text(t0_value);
+      t1 = text(" - ");
+      t2 = text(t2_value);
+    },
+    m(target, anchor) {
+      insert(target, h4, anchor);
+      append(h4, t0);
+      append(h4, t1);
+      append(h4, t2);
+    },
+    p(ctx2, dirty) {
+      if (dirty & /*res*/
+      4 && t0_value !== (t0_value = /*period*/
+      ctx2[9].period + ""))
+        set_data(t0, t0_value);
+      if (dirty & /*res*/
+      4 && t2_value !== (t2_value = /*period*/
+      ctx2[9].title + ""))
+        set_data(t2, t2_value);
+    },
+    d(detaching) {
+      if (detaching) {
+        detach(h4);
+      }
+    }
+  };
+}
 function create_each_block(ctx) {
   let a;
   let div;
-  let h4;
-  let t3;
+  let t2;
   let a_href_value;
+  let if_block = (
+    /*period*/
+    ctx[9].period && create_if_block(ctx)
+  );
   return {
     c() {
       a = element("a");
       div = element("div");
-      h4 = element("h4");
-      h4.textContent = `${/*period*/
-      ctx[5].period} - ${/*period*/
-      ctx[5].title}`;
-      t3 = space();
+      if (if_block)
+        if_block.c();
+      t2 = space();
       attr(div, "class", "");
       attr(a, "href", a_href_value = `https://${/*client*/
-      ctx[0].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
-      ctx[0].userId}#session/${/*period*/
-      ctx[5].instanceId}`);
+      ctx[1].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
+      ctx[1].userId}#session/${/*period*/
+      ctx[9].instanceId}`);
     },
     m(target, anchor) {
       insert(target, a, anchor);
       append(a, div);
-      append(div, h4);
-      append(a, t3);
+      if (if_block)
+        if_block.m(div, null);
+      append(a, t2);
     },
     p(ctx2, dirty) {
-      if (dirty & /*client*/
-      1 && a_href_value !== (a_href_value = `https://${/*client*/
-      ctx2[0].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
-      ctx2[0].userId}#session/${/*period*/
-      ctx2[5].instanceId}`)) {
+      if (
+        /*period*/
+        ctx2[9].period
+      ) {
+        if (if_block) {
+          if_block.p(ctx2, dirty);
+        } else {
+          if_block = create_if_block(ctx2);
+          if_block.c();
+          if_block.m(div, null);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
+      if (dirty & /*client, res*/
+      6 && a_href_value !== (a_href_value = `https://${/*client*/
+      ctx2[1].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
+      ctx2[1].userId}#session/${/*period*/
+      ctx2[9].instanceId}`)) {
         attr(a, "href", a_href_value);
       }
     },
@@ -7316,6 +7387,8 @@ function create_each_block(ctx) {
       if (detaching) {
         detach(a);
       }
+      if (if_block)
+        if_block.d();
     }
   };
 }
@@ -7340,8 +7413,15 @@ function create_pending_block(ctx) {
 function create_fragment(ctx) {
   let div;
   let h2;
+  let t0;
   let t1;
+  let button0;
+  let t3;
+  let button1;
+  let t5;
   let promise;
+  let mounted;
+  let dispose;
   let info = {
     ctx,
     current: null,
@@ -7350,7 +7430,7 @@ function create_fragment(ctx) {
     pending: create_pending_block,
     then: create_then_block,
     catch: create_catch_block,
-    value: 4
+    value: 8
   };
   handle_promise(promise = /*res*/
   ctx[2], info);
@@ -7358,9 +7438,17 @@ function create_fragment(ctx) {
     c() {
       div = element("div");
       h2 = element("h2");
-      h2.textContent = `${/*date*/
-      ctx[1]}`;
+      t0 = text(
+        /*date*/
+        ctx[0]
+      );
       t1 = space();
+      button0 = element("button");
+      button0.textContent = "Previous Day";
+      t3 = space();
+      button1 = element("button");
+      button1.textContent = "Next Day";
+      t5 = space();
       info.block.c();
       attr(h2, "class", "HyperMD-header HyperMD-header-2 cm-line");
       set_style(div, "max-width", "300px");
@@ -7369,14 +7457,49 @@ function create_fragment(ctx) {
     m(target, anchor) {
       insert(target, div, anchor);
       append(div, h2);
+      append(h2, t0);
       append(div, t1);
+      append(div, button0);
+      append(div, t3);
+      append(div, button1);
+      append(div, t5);
       info.block.m(div, info.anchor = null);
       info.mount = () => div;
       info.anchor = null;
+      if (!mounted) {
+        dispose = [
+          listen(
+            button0,
+            "click",
+            /*click_handler*/
+            ctx[5]
+          ),
+          listen(
+            button1,
+            "click",
+            /*click_handler_1*/
+            ctx[6]
+          )
+        ];
+        mounted = true;
+      }
     },
     p(new_ctx, [dirty]) {
       ctx = new_ctx;
-      update_await_block_branch(info, ctx, dirty);
+      if (dirty & /*date*/
+      1)
+        set_data(
+          t0,
+          /*date*/
+          ctx[0]
+        );
+      info.ctx = ctx;
+      if (dirty & /*res*/
+      4 && promise !== (promise = /*res*/
+      ctx[2]) && handle_promise(promise, info)) {
+      } else {
+        update_await_block_branch(info, ctx, dirty);
+      }
     },
     i: noop,
     o: noop,
@@ -7387,28 +7510,51 @@ function create_fragment(ctx) {
       info.block.d();
       info.token = null;
       info = null;
+      mounted = false;
+      run_all(dispose);
     }
   };
 }
 function instance($$self, $$props, $$invalidate) {
   let { sessionId } = $$props;
-  let client;
   let date = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-  let res = compass_default("mullauna-vic.compass.education", "ASP.NET_SessionId=" + sessionId).then(async (c) => {
-    let x2 = await c.Calendar.getCalendarEventsByUser(c.userId, date, date);
-    $$invalidate(0, client = c);
-    return x2;
-  }).then((x2) => x2.sort((a, b) => a.period - b.period));
+  let client;
+  let res;
+  async function incrementDate(offset) {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + offset);
+    $$invalidate(0, date = newDate.toISOString().slice(0, 10));
+    $$invalidate(2, res = fetchData(date));
+  }
+  async function fetchData(date2) {
+    $$invalidate(1, client = await compass_default("mullauna-vic.compass.education", "ASP.NET_SessionId=" + sessionId));
+    let periods = await client.Calendar.getCalendarEventsByUser(client.userId, date2, date2);
+    return periods.sort((a, b) => a.period - b.period);
+  }
+  const click_handler = () => {
+    incrementDate(-1);
+  };
+  const click_handler_1 = () => {
+    incrementDate(1);
+  };
   $$self.$$set = ($$props2) => {
     if ("sessionId" in $$props2)
-      $$invalidate(3, sessionId = $$props2.sessionId);
+      $$invalidate(4, sessionId = $$props2.sessionId);
   };
-  return [client, date, res, sessionId];
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & /*date*/
+    1) {
+      $: {
+        $$invalidate(2, res = fetchData(date));
+      }
+    }
+  };
+  return [date, client, res, incrementDate, sessionId, click_handler, click_handler_1];
 }
 var Main = class extends SvelteComponent {
   constructor(options) {
     super();
-    init(this, options, instance, create_fragment, safe_not_equal, { sessionId: 3 });
+    init(this, options, instance, create_fragment, safe_not_equal, { sessionId: 4 });
   }
 };
 var main_default = Main;
