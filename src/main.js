@@ -24,8 +24,7 @@ class SettingTab extends PluginSettingTab {
 async function getCalendar(sessionId){
   const client = await CompassClient('mullauna-vic.compass.education','ASP.NET_SessionId='+sessionId)
   const date = new Date().toISOString().slice(0,10)
-  const res = await client.Calendar.getCalendarEventsByUser(client.userId,date,date)
-  return res
+  return await client.Calendar.getCalendarEventsByUser(client.userId,date,date)
 }
 
 const CompassView = "CompassView"
