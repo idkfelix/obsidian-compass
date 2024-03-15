@@ -1,6 +1,7 @@
 const {Plugin, ItemView, PluginSettingTab, Setting} = require('obsidian')
-const CompassClient = require('@idkfelix/compass.js').default
+import Component from './main.svelte'
 
+// Settings
 class SettingTab extends PluginSettingTab {
 	constructor(app, plugin) {
 		super(app, plugin);
@@ -21,14 +22,8 @@ class SettingTab extends PluginSettingTab {
 	}
 }
 
-async function getCalendar(sessionId){
-  const client = await CompassClient('mullauna-vic.compass.education','ASP.NET_SessionId='+sessionId)
-  const date = new Date().toISOString().slice(0,10)
-  return await client.Calendar.getCalendarEventsByUser(client.userId,date,date)
-}
-
+// Component View
 const CompassView = "CompassView"
-
 class compassView extends ItemView {
   constructor(leaf, sessionId) {
     super(leaf);
@@ -39,13 +34,17 @@ class compassView extends ItemView {
   getDisplayText() {return "Compass"}
 
   async onOpen() {
-    const res = await getCalendar(this.sessionId)
-    const container = this.containerEl.children[1];
-    container.empty();
-    container.createEl("h4", { text: JSON.stringify(res)});
+    this.icon = "compass"
+    this.component = new Component({
+      target: this.contentEl,
+      props: {
+        sessionId: this.sessionId
+      }
+    });
   }
 }
 
+// Plugin Functions
 module.exports = class CompassPlugin extends Plugin {
   async loadSettings() {
     this.settings = Object.assign({}, {sessionId: ''}, await this.loadData());
@@ -64,13 +63,13 @@ module.exports = class CompassPlugin extends Plugin {
       (leaf) => new compassView(leaf,this.settings.sessionId)
     );
 
-    this.addRibbonIcon("dice", "Compass", () => {
+    this.addRibbonIcon("compass", "Compass", () => {
       // Remove existing leaf
       this.app.workspace.detachLeavesOfType(CompassView);
       // Create leaf on right
       this.app.workspace.getRightLeaf(false).setViewState({
         type: CompassView,
-        active: true
+        active: true,
       })
       // Reveal created leaf
       this.app.workspace.revealLeaf(
