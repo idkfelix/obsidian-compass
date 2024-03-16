@@ -7364,7 +7364,7 @@ var src_default = CompassClient;
 
 // src/main.svelte
 function add_css(target) {
-  append_styles(target, "svelte-1g1xyn1", ".compass-container.svelte-1g1xyn1{background:var(--bg1);border-radius:15px;min-width:250px;max-width:400px;display:block;margin-left:auto;margin-right:auto;padding-top:5px;padding:10px;text-align:center}button.svelte-1g1xyn1{margin-left:8px;margin-right:8px;margin-bottom:20px;width:80px}.period.svelte-1g1xyn1{background:var(--code-background);border-radius:5px;height:40px;padding:10px;padding-right:15px;margin-bottom:5px;display:flex;align-items:center}svg.svelte-1g1xyn1{margin-top:5px}");
+  append_styles(target, "svelte-1atimpc", ".compass-container.svelte-1atimpc{min-width:250px;max-width:400px;display:block;margin-left:auto;margin-right:auto;padding-top:5px;padding:10px;text-align:center}button.svelte-1atimpc{margin-left:8px;margin-right:8px;margin-bottom:20px;width:80px}.period.svelte-1atimpc{background:var(--code-background);border-radius:5px;height:40px;padding:10px;padding-right:15px;margin-bottom:5px;display:flex;align-items:center}svg.svelte-1atimpc{margin-top:5px}");
 }
 function get_each_context(ctx, list, i2) {
   const child_ctx = ctx.slice();
@@ -7390,7 +7390,10 @@ function create_catch_block(ctx) {
   };
 }
 function create_then_block(ctx) {
+  let t2;
   let each_1_anchor;
+  let if_block = !/*periods*/
+  ctx[9][0] && create_if_block_1(ctx);
   let each_value = ensure_array_like(
     /*periods*/
     ctx[9]
@@ -7401,12 +7404,18 @@ function create_then_block(ctx) {
   }
   return {
     c() {
+      if (if_block)
+        if_block.c();
+      t2 = space();
       for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
         each_blocks[i2].c();
       }
       each_1_anchor = empty();
     },
     m(target, anchor) {
+      if (if_block)
+        if_block.m(target, anchor);
+      insert(target, t2, anchor);
       for (let i2 = 0; i2 < each_blocks.length; i2 += 1) {
         if (each_blocks[i2]) {
           each_blocks[i2].m(target, anchor);
@@ -7415,6 +7424,18 @@ function create_then_block(ctx) {
       insert(target, each_1_anchor, anchor);
     },
     p(ctx2, dirty) {
+      if (!/*periods*/
+      ctx2[9][0]) {
+        if (if_block) {
+        } else {
+          if_block = create_if_block_1(ctx2);
+          if_block.c();
+          if_block.m(t2.parentNode, t2);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
       if (dirty & /*client, data*/
       6) {
         each_value = ensure_array_like(
@@ -7440,9 +7461,29 @@ function create_then_block(ctx) {
     },
     d(detaching) {
       if (detaching) {
+        detach(t2);
         detach(each_1_anchor);
       }
+      if (if_block)
+        if_block.d(detaching);
       destroy_each(each_blocks, detaching);
+    }
+  };
+}
+function create_if_block_1(ctx) {
+  let h3;
+  return {
+    c() {
+      h3 = element("h3");
+      h3.textContent = "No Periods";
+    },
+    m(target, anchor) {
+      insert(target, h3, anchor);
+    },
+    d(detaching) {
+      if (detaching) {
+        detach(h3);
+      }
     }
   };
 }
@@ -7505,14 +7546,14 @@ function create_if_block(ctx) {
       attr(svg, "stroke-width", "2");
       attr(svg, "stroke-linecap", "round");
       attr(svg, "stroke-linejoin", "round");
-      attr(svg, "class", "svg-icon lucide-link svelte-1g1xyn1");
+      attr(svg, "class", "svg-icon lucide-link svelte-1atimpc");
       attr(a, "href", a_href_value = `https://${/*client*/
       ctx[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
       ctx[2].userId}#session/${/*period*/
       ctx[10].instanceId}`);
       set_style(a, "all", "unset");
       set_style(a, "margin-left", "auto");
-      attr(div, "class", "period svelte-1g1xyn1");
+      attr(div, "class", "period svelte-1atimpc");
     },
     m(target, anchor) {
       insert(target, div, anchor);
@@ -7668,9 +7709,9 @@ function create_fragment(ctx) {
       button1.textContent = "Next";
       t5 = space();
       info.block.c();
-      attr(button0, "class", "svelte-1g1xyn1");
-      attr(button1, "class", "svelte-1g1xyn1");
-      attr(div, "class", "compass-container svelte-1g1xyn1");
+      attr(button0, "class", "svelte-1atimpc");
+      attr(button1, "class", "svelte-1atimpc");
+      attr(div, "class", "compass-container svelte-1atimpc");
     },
     m(target, anchor) {
       insert(target, div, anchor);

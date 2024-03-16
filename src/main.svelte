@@ -26,6 +26,7 @@
 
   $: {data = fetchData(date.toISOString().slice(0,10))}
 </script>
+
 <div class="compass-container">
   <h2>{date.toDateString()}</h2>
   <button on:click={()=>{incrementDate(-1)}}>Previous</button>
@@ -33,12 +34,18 @@
 
   {#await data}
     <h3>Loading...</h3>
-  {:then periods} 
+  {:then periods}
+
+    {#if !periods[0]}
+      <h3>No Periods</h3>
+    {/if}
+
     {#each periods as period}
       <div class="">
         {#if period.period}
         <div class="period">
           <p>{period.period} - {period.title} - {period.locations[0].locationName} - {period.managers[0].managerImportIdentifier}</p>
+
           <a href={`https://${client.domain}/Organise/Activities/Activity.aspx?targetUserId=${client.userId}#session/${period.instanceId}`} style="all: unset; margin-left: auto;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
           </a>
@@ -46,6 +53,7 @@
         {/if}
       </div>
     {/each}
+
   {:catch}
     <h3>Error Fetching Data</h3>
   {/await}
@@ -53,9 +61,6 @@
 
 <style>
   .compass-container{
-    background: var(--bg1);
-    border-radius: 15px;
-
     min-width: 250px;
     max-width: 400px;
 
