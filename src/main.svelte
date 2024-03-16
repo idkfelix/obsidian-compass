@@ -25,7 +25,6 @@
 
   $: {data = fetchData(date.toISOString().slice(0,10))}
 </script>
-
 <div class="compass-container menu">
   <h2>{date.toDateString()}</h2>
   <button on:click={()=>{incrementDate(-1)}}>Previous</button>
@@ -49,6 +48,7 @@
 </div>
 
 <style>
+  /* fix */
   .compass-container{
     width: 90% !important;
     min-width: 200px;

@@ -7560,18 +7560,20 @@ function create_pending_block(ctx) {
   };
 }
 function create_fragment(ctx) {
-  let div;
+  let div0;
+  let t1;
+  let div1;
   let h2;
-  let t0_value = (
+  let t2_value = (
     /*date*/
     ctx[0].toDateString() + ""
   );
-  let t0;
-  let t1;
-  let button0;
+  let t2;
   let t3;
-  let button1;
+  let button0;
   let t5;
+  let button1;
+  let t7;
   let promise;
   let mounted;
   let dispose;
@@ -7589,33 +7591,39 @@ function create_fragment(ctx) {
   ctx[1], info);
   return {
     c() {
-      div = element("div");
-      h2 = element("h2");
-      t0 = text(t0_value);
+      div0 = element("div");
+      div0.innerHTML = `<h1>Compass</h1>`;
       t1 = space();
+      div1 = element("div");
+      h2 = element("h2");
+      t2 = text(t2_value);
+      t3 = space();
       button0 = element("button");
       button0.textContent = "Previous";
-      t3 = space();
+      t5 = space();
       button1 = element("button");
       button1.textContent = "Next";
-      t5 = space();
+      t7 = space();
       info.block.c();
+      attr(div0, "class", "compass-container menu svelte-n0mcuw");
       attr(h2, "class", "svelte-n0mcuw");
       attr(button0, "class", "svelte-n0mcuw");
       attr(button1, "class", "svelte-n0mcuw");
-      attr(div, "class", "compass-container menu svelte-n0mcuw");
+      attr(div1, "class", "compass-container menu svelte-n0mcuw");
     },
     m(target, anchor) {
-      insert(target, div, anchor);
-      append(div, h2);
-      append(h2, t0);
-      append(div, t1);
-      append(div, button0);
-      append(div, t3);
-      append(div, button1);
-      append(div, t5);
-      info.block.m(div, info.anchor = null);
-      info.mount = () => div;
+      insert(target, div0, anchor);
+      insert(target, t1, anchor);
+      insert(target, div1, anchor);
+      append(div1, h2);
+      append(h2, t2);
+      append(div1, t3);
+      append(div1, button0);
+      append(div1, t5);
+      append(div1, button1);
+      append(div1, t7);
+      info.block.m(div1, info.anchor = null);
+      info.mount = () => div1;
       info.anchor = null;
       if (!mounted) {
         dispose = [
@@ -7638,9 +7646,9 @@ function create_fragment(ctx) {
     p(new_ctx, [dirty]) {
       ctx = new_ctx;
       if (dirty & /*date*/
-      1 && t0_value !== (t0_value = /*date*/
+      1 && t2_value !== (t2_value = /*date*/
       ctx[0].toDateString() + ""))
-        set_data(t0, t0_value);
+        set_data(t2, t2_value);
       info.ctx = ctx;
       if (dirty & /*data*/
       2 && promise !== (promise = /*data*/
@@ -7653,7 +7661,9 @@ function create_fragment(ctx) {
     o: noop,
     d(detaching) {
       if (detaching) {
-        detach(div);
+        detach(div0);
+        detach(t1);
+        detach(div1);
       }
       info.block.d();
       info.token = null;
