@@ -1,4 +1,5 @@
-const {Plugin, ItemView, PluginSettingTab, Setting} = require('obsidian')
+import {Plugin, ItemView, PluginSettingTab, Setting} from 'obsidian'
+//@ts-ignore
 import Component from './main.svelte'
 
 // Settings
@@ -45,7 +46,7 @@ class compassView extends ItemView {
 }
 
 // Plugin Functions
-module.exports = class CompassPlugin extends Plugin {
+export default class CompassPlugin extends Plugin {
   async loadSettings() {
     this.settings = Object.assign({}, {sessionId: ''}, await this.loadData());
   }
