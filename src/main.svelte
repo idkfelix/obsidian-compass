@@ -1,33 +1,36 @@
 <script>
   import CompassClient from './lib/compass'
+  import './lib/types/accounts'
   import './lib/types/calendar'
 
   export let sessionId
-  let date = new Date().toISOString().slice(0,10)
-  const client = await CompassClient('mullauna-vic.compass.education','ASP.NET_SessionId='+sessionId)
+  let date = new Date()
 
   /** @type {Promise<CalendarResponse>} */
   let data
+  /** @type {{userInfo:AccountResponse,userId:number,domain:string,Calendar:any}}*/
+  let client
 
   async function incrementDate(offset) {
-    const newDate = new Date(date)
-    newDate.setDate(newDate.getDate() + offset)
-    date = newDate.toISOString().slice(0,10)
-    data = fetchData(date)
+    date = new Date(date)
+    date.setDate(date.getDate() + offset)
+    data = fetchData(date.toISOString().slice(0,10))
   }
 
   async function fetchData(date) {
+    client = await CompassClient('mullauna-vic.compass.education','ASP.NET_SessionId='+sessionId)
     let periods = await client.Calendar.getCalendarEventsByUser(client.userId, date, date)
     return periods.sort((a,b) => a.period - b.period)
   }
 
-  $: {data = fetchData(date)}
+  $: {data = fetchData(date.toISOString().slice(0,10))}
 </script>
 
-<div style="max-width: 300px;max-height:75px">
-  <h2 class="HyperMD-header HyperMD-header-2 cm-line">{date}</h2>
+<div class="compass-container menu">
+  <h2>{date.toDateString()}</h2>
   <button on:click={()=>{incrementDate(-1)}}>Previous</button>
   <button on:click={()=>{incrementDate(+1)}}>Next</button>
+
   {#await data}
     <h3>Loading...</h3>
   {:then periods} 
@@ -44,3 +47,26 @@
     <h3>Error Fetching Data</h3>
   {/await}
 </div>
+
+<style>
+  .compass-container{
+    width: 90% !important;
+    min-width: 200px;
+    max-width: 400px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 10px;
+  }
+
+  h2{
+    margin: 10px;
+  }
+
+  button{
+    margin-left: 8px;
+    margin-right: 8px;
+    width: 80px;
+  }
+</style>

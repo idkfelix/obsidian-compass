@@ -5206,6 +5206,36 @@ function end_hydrating() {
 function append(target, node) {
   target.appendChild(node);
 }
+function append_styles(target, style_sheet_id, styles) {
+  const append_styles_to = get_root_for_style(target);
+  if (!append_styles_to.getElementById(style_sheet_id)) {
+    const style = element("style");
+    style.id = style_sheet_id;
+    style.textContent = styles;
+    append_stylesheet(append_styles_to, style);
+  }
+}
+function get_root_for_style(node) {
+  if (!node)
+    return document;
+  const root = node.getRootNode ? node.getRootNode() : node.ownerDocument;
+  if (root && /** @type {ShadowRoot} */
+  root.host) {
+    return (
+      /** @type {ShadowRoot} */
+      root
+    );
+  }
+  return node.ownerDocument;
+}
+function append_stylesheet(node, style) {
+  append(
+    /** @type {Document} */
+    node.head || node,
+    style
+  );
+  return style.sheet;
+}
 function insert(target, node, anchor) {
   target.insertBefore(node, anchor || null);
 }
@@ -5251,13 +5281,6 @@ function set_data(text2, data) {
     return;
   text2.data = /** @type {string} */
   data;
-}
-function set_style(node, key, value, important) {
-  if (value == null) {
-    node.style.removeProperty(key);
-  } else {
-    node.style.setProperty(key, value, important ? "important" : "");
-  }
 }
 function get_custom_elements_slots(element2) {
   const result = {};
@@ -5553,7 +5576,7 @@ function make_dirty(component, i2) {
   }
   component.$$.dirty[i2 / 31 | 0] |= 1 << i2 % 31;
 }
-function init(component, options, instance2, create_fragment2, not_equal, props, append_styles = null, dirty = [-1]) {
+function init(component, options, instance2, create_fragment2, not_equal, props, append_styles2 = null, dirty = [-1]) {
   const parent_component = current_component;
   set_current_component(component);
   const $$ = component.$$ = {
@@ -5577,7 +5600,7 @@ function init(component, options, instance2, create_fragment2, not_equal, props,
     skip_bound: false,
     root: options.target || parent_component.$$.root
   };
-  append_styles && append_styles($$.root);
+  append_styles2 && append_styles2($$.root);
   let ready = false;
   $$.ctx = instance2 ? instance2(component, options.props || {}, (i2, ret, ...rest) => {
     const value = rest.length ? rest[0] : ret;
@@ -7207,6 +7230,9 @@ async function CompassClient(domain, cookies) {
 var compass_default = CompassClient;
 
 // src/main.svelte
+function add_css(target) {
+  append_styles(target, "svelte-n0mcuw", ".compass-container.svelte-n0mcuw{width:90% !important;min-width:200px;max-width:400px;text-align:center;display:block;margin-left:auto;margin-right:auto;padding-bottom:10px}h2.svelte-n0mcuw{margin:10px}button.svelte-n0mcuw{margin-left:8px;margin-right:8px;width:80px}");
+}
 function get_each_context(ctx, list, i2) {
   const child_ctx = ctx.slice();
   child_ctx[9] = list[i2];
@@ -7256,7 +7282,7 @@ function create_then_block(ctx) {
       insert(target, each_1_anchor, anchor);
     },
     p(ctx2, dirty) {
-      if (dirty & /*client, res*/
+      if (dirty & /*client, data*/
       6) {
         each_value = ensure_array_like(
           /*periods*/
@@ -7314,12 +7340,12 @@ function create_if_block(ctx) {
       append(h4, t2);
     },
     p(ctx2, dirty) {
-      if (dirty & /*res*/
-      4 && t0_value !== (t0_value = /*period*/
+      if (dirty & /*data*/
+      2 && t0_value !== (t0_value = /*period*/
       ctx2[9].period + ""))
         set_data(t0, t0_value);
-      if (dirty & /*res*/
-      4 && t2_value !== (t2_value = /*period*/
+      if (dirty & /*data*/
+      2 && t2_value !== (t2_value = /*period*/
       ctx2[9].title + ""))
         set_data(t2, t2_value);
     },
@@ -7348,8 +7374,8 @@ function create_each_block(ctx) {
       t2 = space();
       attr(div, "class", "");
       attr(a, "href", a_href_value = `https://${/*client*/
-      ctx[1].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
-      ctx[1].userId}#session/${/*period*/
+      ctx[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
+      ctx[2].userId}#session/${/*period*/
       ctx[9].instanceId}`);
     },
     m(target, anchor) {
@@ -7375,10 +7401,10 @@ function create_each_block(ctx) {
         if_block.d(1);
         if_block = null;
       }
-      if (dirty & /*client, res*/
+      if (dirty & /*client, data*/
       6 && a_href_value !== (a_href_value = `https://${/*client*/
-      ctx2[1].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
-      ctx2[1].userId}#session/${/*period*/
+      ctx2[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
+      ctx2[2].userId}#session/${/*period*/
       ctx2[9].instanceId}`)) {
         attr(a, "href", a_href_value);
       }
@@ -7413,6 +7439,10 @@ function create_pending_block(ctx) {
 function create_fragment(ctx) {
   let div;
   let h2;
+  let t0_value = (
+    /*date*/
+    ctx[0].toDateString() + ""
+  );
   let t0;
   let t1;
   let button0;
@@ -7432,16 +7462,13 @@ function create_fragment(ctx) {
     catch: create_catch_block,
     value: 8
   };
-  handle_promise(promise = /*res*/
-  ctx[2], info);
+  handle_promise(promise = /*data*/
+  ctx[1], info);
   return {
     c() {
       div = element("div");
       h2 = element("h2");
-      t0 = text(
-        /*date*/
-        ctx[0]
-      );
+      t0 = text(t0_value);
       t1 = space();
       button0 = element("button");
       button0.textContent = "Previous";
@@ -7450,9 +7477,10 @@ function create_fragment(ctx) {
       button1.textContent = "Next";
       t5 = space();
       info.block.c();
-      attr(h2, "class", "HyperMD-header HyperMD-header-2 cm-line");
-      set_style(div, "max-width", "300px");
-      set_style(div, "max-height", "75px");
+      attr(h2, "class", "svelte-n0mcuw");
+      attr(button0, "class", "svelte-n0mcuw");
+      attr(button1, "class", "svelte-n0mcuw");
+      attr(div, "class", "compass-container menu svelte-n0mcuw");
     },
     m(target, anchor) {
       insert(target, div, anchor);
@@ -7487,16 +7515,13 @@ function create_fragment(ctx) {
     p(new_ctx, [dirty]) {
       ctx = new_ctx;
       if (dirty & /*date*/
-      1)
-        set_data(
-          t0,
-          /*date*/
-          ctx[0]
-        );
+      1 && t0_value !== (t0_value = /*date*/
+      ctx[0].toDateString() + ""))
+        set_data(t0, t0_value);
       info.ctx = ctx;
-      if (dirty & /*res*/
-      4 && promise !== (promise = /*res*/
-      ctx[2]) && handle_promise(promise, info)) {
+      if (dirty & /*data*/
+      2 && promise !== (promise = /*data*/
+      ctx[1]) && handle_promise(promise, info)) {
       } else {
         update_await_block_branch(info, ctx, dirty);
       }
@@ -7517,17 +7542,16 @@ function create_fragment(ctx) {
 }
 function instance($$self, $$props, $$invalidate) {
   let { sessionId } = $$props;
-  let date = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+  let date = /* @__PURE__ */ new Date();
+  let data;
   let client;
-  let res;
   async function incrementDate(offset) {
-    const newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + offset);
-    $$invalidate(0, date = newDate.toISOString().slice(0, 10));
-    $$invalidate(2, res = fetchData(date));
+    $$invalidate(0, date = new Date(date));
+    date.setDate(date.getDate() + offset);
+    $$invalidate(1, data = fetchData(date.toISOString().slice(0, 10)));
   }
   async function fetchData(date2) {
-    $$invalidate(1, client = await compass_default("mullauna-vic.compass.education", "ASP.NET_SessionId=" + sessionId));
+    $$invalidate(2, client = await compass_default("mullauna-vic.compass.education", "ASP.NET_SessionId=" + sessionId));
     let periods = await client.Calendar.getCalendarEventsByUser(client.userId, date2, date2);
     return periods.sort((a, b) => a.period - b.period);
   }
@@ -7545,16 +7569,16 @@ function instance($$self, $$props, $$invalidate) {
     if ($$self.$$.dirty & /*date*/
     1) {
       $: {
-        $$invalidate(2, res = fetchData(date));
+        $$invalidate(1, data = fetchData(date.toISOString().slice(0, 10)));
       }
     }
   };
-  return [date, client, res, incrementDate, sessionId, click_handler, click_handler_1];
+  return [date, data, client, incrementDate, sessionId, click_handler, click_handler_1];
 }
 var Main = class extends SvelteComponent {
   constructor(options) {
     super();
-    init(this, options, instance, create_fragment, safe_not_equal, { sessionId: 4 });
+    init(this, options, instance, create_fragment, safe_not_equal, { sessionId: 4 }, add_css);
   }
 };
 var main_default = Main;
