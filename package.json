@@ -17,6 +17,7 @@
     "svelte-preprocess": "^5.1.3"
   },
   "dependencies": {
+    "@idkfelix/compass.js": "^1.0.10",
     "node-fetch": "^3.3.2"
   }
 }

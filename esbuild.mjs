@@ -12,7 +12,7 @@ let stripNodeColonPlugin = {
 }
 
 let sveltePlugin = esbuildSvelte({
-  compilerOptions: { css: true },
+  compilerOptions: { css:'injected' },
   preprocess: sveltePreprocess(),
 })
 

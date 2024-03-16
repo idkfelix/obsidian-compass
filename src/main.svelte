@@ -1,12 +1,12 @@
 <script>
-  import CompassClient from './lib/compass'
-  import './lib/types/accounts'
-  import './lib/types/calendar'
+  import CompassClient from '@idkfelix/compass.js'
+  import '@idkfelix/compass.js/src/types/accounts'
+  import '@idkfelix/compass.js/src/types/calendar'
 
   export let sessionId
   let date = new Date()
 
-  /** @type {Promise<CalendarResponse>} */
+  /** @type {Promise<CalendarRespone>} */
   let data
   /** @type {{userInfo:AccountResponse,userId:number,domain:string,Calendar:any}}*/
   let client
