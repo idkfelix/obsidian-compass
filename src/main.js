@@ -1,5 +1,4 @@
 import {Plugin, ItemView, PluginSettingTab, Setting} from 'obsidian'
-//@ts-ignore
 import Component from './main.svelte'
 
 // Settings
@@ -20,15 +19,25 @@ class SettingTab extends PluginSettingTab {
 					this.plugin.settings.sessionId= value;
 					await this.plugin.saveSettings();
 				}));
+    new Setting(containerEl)
+    .setName('Compass Domain')
+    .addText(text => text
+      .setPlaceholder('your-school.compass.education')
+      .setValue(this.plugin.settings.domain)
+      .onChange(async (value) => {
+        this.plugin.settings.domain= value;
+        await this.plugin.saveSettings();
+      }));
 	}
 }
 
 // Component View
 const CompassView = "CompassView"
 class compassView extends ItemView {
-  constructor(leaf, sessionId) {
+  constructor(leaf, sessionId, domain) {
     super(leaf);
     this.sessionId = sessionId
+    this.domain = domain
   }
 
   getViewType() {return CompassView}
@@ -39,7 +48,8 @@ class compassView extends ItemView {
     this.component = new Component({
       target: this.contentEl,
       props: {
-        sessionId: this.sessionId
+        sessionId: this.sessionId,
+        domain: this.domain
       }
     });
   }
@@ -48,7 +58,7 @@ class compassView extends ItemView {
 // Plugin Functions
 export default class CompassPlugin extends Plugin {
   async loadSettings() {
-    this.settings = Object.assign({}, {sessionId: ''}, await this.loadData());
+    this.settings = Object.assign({}, {sessionId: '',domain: ''}, await this.loadData());
   }
 
   async saveSettings() {
@@ -61,7 +71,7 @@ export default class CompassPlugin extends Plugin {
 
     this.registerView(
       CompassView,
-      (leaf) => new compassView(leaf,this.settings.sessionId)
+      (leaf) => new compassView(leaf,this.settings.sessionId,this.settings.domain)
     );
 
     this.addRibbonIcon("compass", "Compass", () => {

@@ -5262,6 +5262,9 @@ function destroy_each(iterations, detaching) {
 function element(name) {
   return document.createElement(name);
 }
+function svg_element(name) {
+  return document.createElementNS("http://www.w3.org/2000/svg", name);
+}
 function text(data) {
   return document.createTextNode(data);
 }
@@ -5290,6 +5293,13 @@ function set_data(text2, data) {
     return;
   text2.data = /** @type {string} */
   data;
+}
+function set_style(node, key, value, important) {
+  if (value == null) {
+    node.style.removeProperty(key);
+  } else {
+    node.style.setProperty(key, value, important ? "important" : "");
+  }
 }
 function get_custom_elements_slots(element2) {
   const result = {};
@@ -7354,11 +7364,11 @@ var src_default = CompassClient;
 
 // src/main.svelte
 function add_css(target) {
-  append_styles(target, "svelte-n0mcuw", ".compass-container.svelte-n0mcuw{width:90% !important;min-width:200px;max-width:400px;text-align:center;display:block;margin-left:auto;margin-right:auto;padding-bottom:10px}h2.svelte-n0mcuw{margin:10px}button.svelte-n0mcuw{margin-left:8px;margin-right:8px;width:80px}");
+  append_styles(target, "svelte-1g1xyn1", ".compass-container.svelte-1g1xyn1{background:var(--bg1);border-radius:15px;min-width:250px;max-width:400px;display:block;margin-left:auto;margin-right:auto;padding-top:5px;padding:10px;text-align:center}button.svelte-1g1xyn1{margin-left:8px;margin-right:8px;margin-bottom:20px;width:80px}.period.svelte-1g1xyn1{background:var(--code-background);border-radius:5px;height:40px;padding:10px;padding-right:15px;margin-bottom:5px;display:flex;align-items:center}svg.svelte-1g1xyn1{margin-top:5px}");
 }
 function get_each_context(ctx, list, i2) {
   const child_ctx = ctx.slice();
-  child_ctx[9] = list[i2];
+  child_ctx[10] = list[i2];
   return child_ctx;
 }
 function create_catch_block(ctx) {
@@ -7383,7 +7393,7 @@ function create_then_block(ctx) {
   let each_1_anchor;
   let each_value = ensure_array_like(
     /*periods*/
-    ctx[8]
+    ctx[9]
   );
   let each_blocks = [];
   for (let i2 = 0; i2 < each_value.length; i2 += 1) {
@@ -7409,7 +7419,7 @@ function create_then_block(ctx) {
       6) {
         each_value = ensure_array_like(
           /*periods*/
-          ctx2[8]
+          ctx2[9]
         );
         let i2;
         for (i2 = 0; i2 < each_value.length; i2 += 1) {
@@ -7437,104 +7447,162 @@ function create_then_block(ctx) {
   };
 }
 function create_if_block(ctx) {
-  let h4;
+  let div;
+  let p;
   let t0_value = (
     /*period*/
-    ctx[9].period + ""
+    ctx[10].period + ""
   );
   let t0;
   let t1;
   let t2_value = (
     /*period*/
-    ctx[9].title + ""
+    ctx[10].title + ""
   );
   let t2;
+  let t3;
+  let t4_value = (
+    /*period*/
+    ctx[10].locations[0].locationName + ""
+  );
+  let t4;
+  let t5;
+  let t6_value = (
+    /*period*/
+    ctx[10].managers[0].managerImportIdentifier + ""
+  );
+  let t6;
+  let t7;
+  let a;
+  let svg;
+  let path0;
+  let path1;
+  let a_href_value;
   return {
     c() {
-      h4 = element("h4");
+      div = element("div");
+      p = element("p");
       t0 = text(t0_value);
       t1 = text(" - ");
       t2 = text(t2_value);
+      t3 = text(" - ");
+      t4 = text(t4_value);
+      t5 = text(" - ");
+      t6 = text(t6_value);
+      t7 = space();
+      a = element("a");
+      svg = svg_element("svg");
+      path0 = svg_element("path");
+      path1 = svg_element("path");
+      attr(path0, "d", "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71");
+      attr(path1, "d", "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71");
+      attr(svg, "xmlns", "http://www.w3.org/2000/svg");
+      attr(svg, "width", "24");
+      attr(svg, "height", "24");
+      attr(svg, "viewBox", "0 0 24 24");
+      attr(svg, "fill", "none");
+      attr(svg, "stroke", "currentColor");
+      attr(svg, "stroke-width", "2");
+      attr(svg, "stroke-linecap", "round");
+      attr(svg, "stroke-linejoin", "round");
+      attr(svg, "class", "svg-icon lucide-link svelte-1g1xyn1");
+      attr(a, "href", a_href_value = `https://${/*client*/
+      ctx[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
+      ctx[2].userId}#session/${/*period*/
+      ctx[10].instanceId}`);
+      set_style(a, "all", "unset");
+      set_style(a, "margin-left", "auto");
+      attr(div, "class", "period svelte-1g1xyn1");
     },
     m(target, anchor) {
-      insert(target, h4, anchor);
-      append(h4, t0);
-      append(h4, t1);
-      append(h4, t2);
+      insert(target, div, anchor);
+      append(div, p);
+      append(p, t0);
+      append(p, t1);
+      append(p, t2);
+      append(p, t3);
+      append(p, t4);
+      append(p, t5);
+      append(p, t6);
+      append(div, t7);
+      append(div, a);
+      append(a, svg);
+      append(svg, path0);
+      append(svg, path1);
     },
     p(ctx2, dirty) {
       if (dirty & /*data*/
       2 && t0_value !== (t0_value = /*period*/
-      ctx2[9].period + ""))
+      ctx2[10].period + ""))
         set_data(t0, t0_value);
       if (dirty & /*data*/
       2 && t2_value !== (t2_value = /*period*/
-      ctx2[9].title + ""))
+      ctx2[10].title + ""))
         set_data(t2, t2_value);
+      if (dirty & /*data*/
+      2 && t4_value !== (t4_value = /*period*/
+      ctx2[10].locations[0].locationName + ""))
+        set_data(t4, t4_value);
+      if (dirty & /*data*/
+      2 && t6_value !== (t6_value = /*period*/
+      ctx2[10].managers[0].managerImportIdentifier + ""))
+        set_data(t6, t6_value);
+      if (dirty & /*client, data*/
+      6 && a_href_value !== (a_href_value = `https://${/*client*/
+      ctx2[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
+      ctx2[2].userId}#session/${/*period*/
+      ctx2[10].instanceId}`)) {
+        attr(a, "href", a_href_value);
+      }
     },
     d(detaching) {
       if (detaching) {
-        detach(h4);
+        detach(div);
       }
     }
   };
 }
 function create_each_block(ctx) {
-  let a;
   let div;
   let t2;
-  let a_href_value;
   let if_block = (
     /*period*/
-    ctx[9].period && create_if_block(ctx)
+    ctx[10].period && create_if_block(ctx)
   );
   return {
     c() {
-      a = element("a");
       div = element("div");
       if (if_block)
         if_block.c();
       t2 = space();
       attr(div, "class", "");
-      attr(a, "href", a_href_value = `https://${/*client*/
-      ctx[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
-      ctx[2].userId}#session/${/*period*/
-      ctx[9].instanceId}`);
     },
     m(target, anchor) {
-      insert(target, a, anchor);
-      append(a, div);
+      insert(target, div, anchor);
       if (if_block)
         if_block.m(div, null);
-      append(a, t2);
+      append(div, t2);
     },
     p(ctx2, dirty) {
       if (
         /*period*/
-        ctx2[9].period
+        ctx2[10].period
       ) {
         if (if_block) {
           if_block.p(ctx2, dirty);
         } else {
           if_block = create_if_block(ctx2);
           if_block.c();
-          if_block.m(div, null);
+          if_block.m(div, t2);
         }
       } else if (if_block) {
         if_block.d(1);
         if_block = null;
       }
-      if (dirty & /*client, data*/
-      6 && a_href_value !== (a_href_value = `https://${/*client*/
-      ctx2[2].domain}/Organise/Activities/Activity.aspx?targetUserId=${/*client*/
-      ctx2[2].userId}#session/${/*period*/
-      ctx2[9].instanceId}`)) {
-        attr(a, "href", a_href_value);
-      }
     },
     d(detaching) {
       if (detaching) {
-        detach(a);
+        detach(div);
       }
       if (if_block)
         if_block.d();
@@ -7560,20 +7628,18 @@ function create_pending_block(ctx) {
   };
 }
 function create_fragment(ctx) {
-  let div0;
-  let t1;
-  let div1;
+  let div;
   let h2;
-  let t2_value = (
+  let t0_value = (
     /*date*/
     ctx[0].toDateString() + ""
   );
-  let t2;
-  let t3;
+  let t0;
+  let t1;
   let button0;
-  let t5;
+  let t3;
   let button1;
-  let t7;
+  let t5;
   let promise;
   let mounted;
   let dispose;
@@ -7585,45 +7651,38 @@ function create_fragment(ctx) {
     pending: create_pending_block,
     then: create_then_block,
     catch: create_catch_block,
-    value: 8
+    value: 9
   };
   handle_promise(promise = /*data*/
   ctx[1], info);
   return {
     c() {
-      div0 = element("div");
-      div0.innerHTML = `<h1>Compass</h1>`;
-      t1 = space();
-      div1 = element("div");
+      div = element("div");
       h2 = element("h2");
-      t2 = text(t2_value);
-      t3 = space();
+      t0 = text(t0_value);
+      t1 = space();
       button0 = element("button");
       button0.textContent = "Previous";
-      t5 = space();
+      t3 = space();
       button1 = element("button");
       button1.textContent = "Next";
-      t7 = space();
+      t5 = space();
       info.block.c();
-      attr(div0, "class", "compass-container menu svelte-n0mcuw");
-      attr(h2, "class", "svelte-n0mcuw");
-      attr(button0, "class", "svelte-n0mcuw");
-      attr(button1, "class", "svelte-n0mcuw");
-      attr(div1, "class", "compass-container menu svelte-n0mcuw");
+      attr(button0, "class", "svelte-1g1xyn1");
+      attr(button1, "class", "svelte-1g1xyn1");
+      attr(div, "class", "compass-container svelte-1g1xyn1");
     },
     m(target, anchor) {
-      insert(target, div0, anchor);
-      insert(target, t1, anchor);
-      insert(target, div1, anchor);
-      append(div1, h2);
-      append(h2, t2);
-      append(div1, t3);
-      append(div1, button0);
-      append(div1, t5);
-      append(div1, button1);
-      append(div1, t7);
-      info.block.m(div1, info.anchor = null);
-      info.mount = () => div1;
+      insert(target, div, anchor);
+      append(div, h2);
+      append(h2, t0);
+      append(div, t1);
+      append(div, button0);
+      append(div, t3);
+      append(div, button1);
+      append(div, t5);
+      info.block.m(div, info.anchor = null);
+      info.mount = () => div;
       info.anchor = null;
       if (!mounted) {
         dispose = [
@@ -7631,13 +7690,13 @@ function create_fragment(ctx) {
             button0,
             "click",
             /*click_handler*/
-            ctx[5]
+            ctx[6]
           ),
           listen(
             button1,
             "click",
             /*click_handler_1*/
-            ctx[6]
+            ctx[7]
           )
         ];
         mounted = true;
@@ -7646,9 +7705,9 @@ function create_fragment(ctx) {
     p(new_ctx, [dirty]) {
       ctx = new_ctx;
       if (dirty & /*date*/
-      1 && t2_value !== (t2_value = /*date*/
+      1 && t0_value !== (t0_value = /*date*/
       ctx[0].toDateString() + ""))
-        set_data(t2, t2_value);
+        set_data(t0, t0_value);
       info.ctx = ctx;
       if (dirty & /*data*/
       2 && promise !== (promise = /*data*/
@@ -7661,9 +7720,7 @@ function create_fragment(ctx) {
     o: noop,
     d(detaching) {
       if (detaching) {
-        detach(div0);
-        detach(t1);
-        detach(div1);
+        detach(div);
       }
       info.block.d();
       info.token = null;
@@ -7675,6 +7732,7 @@ function create_fragment(ctx) {
 }
 function instance($$self, $$props, $$invalidate) {
   let { sessionId } = $$props;
+  let { domain } = $$props;
   let date = /* @__PURE__ */ new Date();
   let data;
   let client;
@@ -7684,7 +7742,7 @@ function instance($$self, $$props, $$invalidate) {
     $$invalidate(1, data = fetchData(date.toISOString().slice(0, 10)));
   }
   async function fetchData(date2) {
-    $$invalidate(2, client = await src_default("mullauna-vic.compass.education", "ASP.NET_SessionId=" + sessionId));
+    $$invalidate(2, client = await src_default(domain, "ASP.NET_SessionId=" + sessionId));
     let periods = await client.Calendar.getCalendarEventsByUser(client.userId, date2, date2);
     return periods.sort((a, b) => a.period - b.period);
   }
@@ -7697,6 +7755,8 @@ function instance($$self, $$props, $$invalidate) {
   $$self.$$set = ($$props2) => {
     if ("sessionId" in $$props2)
       $$invalidate(4, sessionId = $$props2.sessionId);
+    if ("domain" in $$props2)
+      $$invalidate(5, domain = $$props2.domain);
   };
   $$self.$$.update = () => {
     if ($$self.$$.dirty & /*date*/
@@ -7706,12 +7766,21 @@ function instance($$self, $$props, $$invalidate) {
       }
     }
   };
-  return [date, data, client, incrementDate, sessionId, click_handler, click_handler_1];
+  return [
+    date,
+    data,
+    client,
+    incrementDate,
+    sessionId,
+    domain,
+    click_handler,
+    click_handler_1
+  ];
 }
 var Main = class extends SvelteComponent {
   constructor(options) {
     super();
-    init(this, options, instance, create_fragment, safe_not_equal, { sessionId: 4 }, add_css);
+    init(this, options, instance, create_fragment, safe_not_equal, { sessionId: 4, domain: 5 }, add_css);
   }
 };
 var main_default = Main;
@@ -7729,13 +7798,18 @@ var SettingTab = class extends import_obsidian.PluginSettingTab {
       this.plugin.settings.sessionId = value;
       await this.plugin.saveSettings();
     }));
+    new import_obsidian.Setting(containerEl).setName("Compass Domain").addText((text2) => text2.setPlaceholder("your-school.compass.education").setValue(this.plugin.settings.domain).onChange(async (value) => {
+      this.plugin.settings.domain = value;
+      await this.plugin.saveSettings();
+    }));
   }
 };
 var CompassView = "CompassView";
 var compassView = class extends import_obsidian.ItemView {
-  constructor(leaf, sessionId) {
+  constructor(leaf, sessionId, domain) {
     super(leaf);
     this.sessionId = sessionId;
+    this.domain = domain;
   }
   getViewType() {
     return CompassView;
@@ -7748,14 +7822,15 @@ var compassView = class extends import_obsidian.ItemView {
     this.component = new main_default({
       target: this.contentEl,
       props: {
-        sessionId: this.sessionId
+        sessionId: this.sessionId,
+        domain: this.domain
       }
     });
   }
 };
 var CompassPlugin = class extends import_obsidian.Plugin {
   async loadSettings() {
-    this.settings = Object.assign({}, { sessionId: "" }, await this.loadData());
+    this.settings = Object.assign({}, { sessionId: "", domain: "" }, await this.loadData());
   }
   async saveSettings() {
     await this.saveData(this.settings);
@@ -7765,7 +7840,7 @@ var CompassPlugin = class extends import_obsidian.Plugin {
     this.addSettingTab(new SettingTab(this.app, this));
     this.registerView(
       CompassView,
-      (leaf) => new compassView(leaf, this.settings.sessionId)
+      (leaf) => new compassView(leaf, this.settings.sessionId, this.settings.domain)
     );
     this.addRibbonIcon("compass", "Compass", () => {
       this.app.workspace.detachLeavesOfType(CompassView);

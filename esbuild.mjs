@@ -16,19 +16,23 @@ let sveltePlugin = esbuildSvelte({
   preprocess: sveltePreprocess(),
 })
 
-await esbuild.build({
-  plugins:[
-    stripNodeColonPlugin,
-    sveltePlugin,
-  ],
-  entryPoints: ['src/main.js'],
-  bundle: true,
-  format: "cjs",
-	target: "es2018",
-	logLevel: "info",
-	treeShaking: true,
-  outfile: 'main.js',
-  external: [
-    "obsidian",
-  ],
-})
+async function watch(){
+  let ctx = await esbuild.context({
+    plugins:[
+      stripNodeColonPlugin,
+      sveltePlugin,
+    ],
+    entryPoints: ['src/main.js'],
+    bundle: true,
+    format: "cjs",
+    target: "es2018",
+    logLevel: "info",
+    treeShaking: true,
+    outfile: 'main.js',
+    external: [
+      "obsidian",
+    ],
+  })
+  await ctx.watch()
+}
+watch()
