@@ -7775,12 +7775,14 @@ function instance($$self, $$props, $$invalidate) {
   let { sessionId } = $$props;
   let { domain } = $$props;
   let date = /* @__PURE__ */ new Date();
-  let data;
+  let data = incrementDate(0);
   let client;
   async function incrementDate(offset) {
     $$invalidate(0, date = new Date(date));
     date.setDate(date.getDate() + offset);
-    $$invalidate(1, data = fetchData(date.toISOString().slice(0, 10)));
+    let local = new Date(date.getTime() - date.getTimezoneOffset() * 6e4);
+    $$invalidate(1, data = fetchData(local.toISOString().slice(0, 10)));
+    return data;
   }
   async function fetchData(date2) {
     $$invalidate(2, client = await src_default(domain, "ASP.NET_SessionId=" + sessionId));
@@ -7799,14 +7801,9 @@ function instance($$self, $$props, $$invalidate) {
     if ("domain" in $$props2)
       $$invalidate(5, domain = $$props2.domain);
   };
-  $$self.$$.update = () => {
-    if ($$self.$$.dirty & /*date*/
-    1) {
-      $: {
-        $$invalidate(1, data = fetchData(date.toISOString().slice(0, 10)));
-      }
-    }
-  };
+  $: {
+    $$invalidate(1, data = incrementDate(0));
+  }
   return [
     date,
     data,

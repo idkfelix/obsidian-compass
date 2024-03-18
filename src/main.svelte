@@ -8,14 +8,16 @@
   let date = new Date()
 
   /** @type {Promise<CalendarResponse>} */
-  let data
+  let data = incrementDate(0)
   /** @type {{userInfo:AccountResponse,userId:number,domain:string,Calendar:any}}*/
   let client
 
   async function incrementDate(offset) {
     date = new Date(date)
     date.setDate(date.getDate() + offset)
-    data = fetchData(date.toISOString().slice(0,10))
+    let local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    data = fetchData(local.toISOString().slice(0,10))
+    return data
   }
 
   async function fetchData(date) {
@@ -24,7 +26,7 @@
     return periods.sort((a,b) => a.period - b.period)
   }
 
-  $: {data = fetchData(date.toISOString().slice(0,10))}
+  $: {data = incrementDate(0)}
 </script>
 
 <div class="compass-container">
